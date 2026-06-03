@@ -6,6 +6,7 @@ import './styles/index.css';
 import { App } from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastViewport } from './components/ToastViewport';
+import { registerServiceWorker } from './lib/registerServiceWorker';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,3 +28,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
+
+registerServiceWorker();

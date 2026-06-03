@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Рабочее место комплектовщика">
+  <rect width="512" height="512" fill="#0A0A0A"/>
+  <path d="M72 96h368v320H72z" fill="#0F0F0F" stroke="#262626" stroke-width="16"/>
+  <path d="M112 152h288M112 216h288M112 280h176" stroke="#FAFAFA" stroke-width="24" stroke-linecap="square"/>
+  <path d="M328 280h72v72h-72z" fill="#FF3D00"/>
+  <path d="M112 352h184" stroke="#737373" stroke-width="20" stroke-linecap="square"/>
+</svg>

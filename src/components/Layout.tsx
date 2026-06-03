@@ -1,5 +1,4 @@
-import { ClipboardList, LogOut, MapPin, Menu, Route, Truck, X } from 'lucide-react';
-import { useState } from 'react';
+import { ClipboardList, LogOut, MapPin, Route, Truck } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { useQuery } from '@tanstack/react-query';
@@ -7,17 +6,30 @@ import { getOrders } from '../api/orders';
 import { countOrderGroups } from '../lib/orderFilters';
 import { queryKeys } from '../lib/query';
 import { useAuthStore } from '../store/auth';
-import { Button } from './Button';
 
 const navItems = [
-  { to: '/', label: 'Заказы', icon: ClipboardList },
-  { to: '/couriers/locations', label: 'Курьеры на карте', icon: MapPin },
-  { to: '/couriers/reports', label: 'Отчеты курьеров', icon: Truck },
-  { to: '/couriers/shifts', label: 'Смены курьеров', icon: Route },
+  { to: '/', label: 'Заказы', mobileLabel: 'Заказы', icon: ClipboardList },
+  {
+    to: '/couriers/locations',
+    label: 'Курьеры на карте',
+    mobileLabel: 'Карта',
+    icon: MapPin,
+  },
+  {
+    to: '/couriers/reports',
+    label: 'Отчеты курьеров',
+    mobileLabel: 'Отчеты',
+    icon: Truck,
+  },
+  {
+    to: '/couriers/shifts',
+    label: 'Смены курьеров',
+    mobileLabel: 'Смены',
+    icon: Route,
+  },
 ];
 
 export function Layout() {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
   const orderCountersQuery = useQuery({
@@ -40,12 +52,7 @@ export function Layout() {
 
   return (
     <div className="telegram-safe-shell min-h-screen bg-transparent text-ink">
-      <aside
-        className={clsx(
-          'fixed inset-y-0 left-0 z-40 w-72 border-r border-line bg-background transition-transform lg:translate-x-0',
-          mobileOpen ? 'translate-x-0' : '-translate-x-full',
-        )}
-      >
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-line bg-background lg:block">
         <div className="flex h-16 items-center justify-between border-b border-line px-5">
           <div>
             <p className="label-text text-accent">Рабочее место</p>
@@ -53,13 +60,6 @@ export function Layout() {
               Комплектовщика
             </h1>
           </div>
-          <Button
-            variant="ghost"
-            className="h-9 w-9 px-0 lg:hidden"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Закрыть меню"
-            icon={<X className="h-5 w-5" />}
-          />
         </div>
 
         <nav className="space-y-1 p-3">
@@ -69,7 +69,6 @@ export function Layout() {
               <NavLink
                 key={item.to}
                 to={item.to}
-                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   clsx(
                     'flex min-h-11 items-center gap-3 rounded-none border-l-2 px-3 py-2.5 text-sm font-bold uppercase transition',
@@ -105,36 +104,52 @@ export function Layout() {
         </nav>
       </aside>
 
-      {mobileOpen ? (
-        <button
-          className="fixed inset-0 z-30 bg-background/80 lg:hidden"
-          type="button"
-          aria-label="Закрыть меню"
-          onClick={() => setMobileOpen(false)}
-        />
-      ) : null}
-
       <div className="lg:pl-72">
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-line bg-background/95 px-4 backdrop-blur lg:px-6">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              className="h-10 w-10 px-0 lg:hidden"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Открыть меню"
-              icon={<Menu className="h-5 w-5" />}
-            />
-            <div>
-              <p className="label-text text-muted">Рабочее место комплектовщика</p>
-              <p className="text-sm font-semibold text-ink">Обработка и сборка заказов</p>
+            <div className="min-w-0">
+              <p className="label-text truncate text-muted">Рабочее место комплектовщика</p>
+              <p className="truncate text-sm font-semibold text-ink">
+                Обработка и сборка заказов
+              </p>
             </div>
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-7xl px-6 py-8 pb-[calc(2rem+var(--app-content-safe-bottom,0px))] md:px-12 lg:px-16">
+        <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-[calc(5.75rem+var(--app-content-safe-bottom,0px))] sm:px-6 md:px-12 md:py-8 lg:px-16 lg:pb-[calc(2rem+var(--app-content-safe-bottom,0px))]">
           <Outlet />
         </main>
       </div>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-background/95 px-2 pb-[calc(0.5rem+var(--app-content-safe-bottom,0px))] pt-2 backdrop-blur lg:hidden">
+        <div className="grid grid-cols-4 gap-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  clsx(
+                    'relative flex min-h-14 flex-col items-center justify-center gap-1 border border-transparent px-1 py-1 text-[10px] font-bold uppercase transition',
+                    isActive
+                      ? 'border-accent bg-accent/10 text-accent'
+                      : 'text-muted hover:border-line hover:text-foreground',
+                  )
+                }
+              >
+                <Icon className="h-5 w-5" />
+                <span className="max-w-full truncate">{item.mobileLabel}</span>
+                {item.to === '/' && (orderCounts.new || orderCounts.collecting) ? (
+                  <span className="absolute right-1 top-1 min-w-4 border border-accent bg-accent px-1 text-center text-[9px] leading-4 text-background">
+                    {(orderCounts.new ?? 0) + (orderCounts.collecting ?? 0)}
+                  </span>
+                ) : null}
+              </NavLink>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }

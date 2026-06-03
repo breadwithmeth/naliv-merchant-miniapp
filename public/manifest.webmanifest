@@ -1,0 +1,21 @@
+{
+  "name": "Рабочее место комплектовщика",
+  "short_name": "Комплектовщик",
+  "description": "Рабочее место комплектовщика для обработки и сборки заказов.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "ru"
+}

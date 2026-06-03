@@ -33,7 +33,7 @@ export function LoginPage() {
     <main className="telegram-safe-shell flex min-h-screen items-center justify-center bg-transparent px-4 py-8">
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-none border border-line bg-card p-6 shadow-none"
+        className="w-full max-w-md rounded-none border border-line bg-card p-4 shadow-none sm:p-6"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-none bg-accent/10 text-accent">
           <KeyRound className="h-6 w-6" />
