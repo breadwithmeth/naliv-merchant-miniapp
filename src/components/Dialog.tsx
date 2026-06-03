@@ -18,10 +18,10 @@ export function Dialog({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
-      <div className="max-h-[92vh] w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4">
+      <div className="max-h-[92vh] w-full max-w-lg overflow-hidden rounded-none border border-line bg-card shadow-none">
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
-          <h2 className="text-base font-semibold text-ink">{title}</h2>
+          <h2 className="section-title text-ink">{title}</h2>
           <Button
             variant="ghost"
             className="h-9 w-9 px-0"

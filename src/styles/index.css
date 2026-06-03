@@ -1,20 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color: #172033;
-  background: #f8fafc;
+  color: #fafafa;
+  background: #0a0a0a;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+#root {
+  min-height: 100%;
+  background: #0a0a0a;
+}
+
 body {
   min-width: 320px;
-  min-height: 100vh;
+  min-height: var(--app-viewport-stable-height, 100vh);
   margin: 0;
+  background:
+    linear-gradient(rgba(10, 10, 10, 0.985), rgba(10, 10, 10, 0.985)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23noise)' opacity='.55'/%3E%3C/svg%3E");
+  color: #fafafa;
+  font-family: "Inter Tight", Inter, system-ui, sans-serif;
+}
+
+.telegram-mini-app body,
+.telegram-mini-app #root {
+  min-height: var(--app-viewport-height, 100vh);
+}
+
+.telegram-safe-shell {
+  min-height: var(--app-viewport-height, 100vh);
+  padding-left: var(--app-content-safe-left, 0px);
+  padding-right: var(--app-content-safe-right, 0px);
 }
 
 button,
@@ -34,21 +58,22 @@ textarea {
   display: block;
   width: 24px;
   height: 24px;
-  border: 3px solid white;
-  border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.28);
+  border: 2px solid #fafafa;
+  border-radius: 0;
+  box-shadow: none;
+  transform: rotate(45deg);
 }
 
 .map-pin-courier {
-  background: #f97316;
+  background: #ff3d00;
 }
 
 .map-pin-business {
-  background: #2563eb;
+  background: #fafafa;
 }
 
 .map-pin-delivery {
-  background: #16a34a;
+  background: #737373;
 }
 
 #html5-qrcode-button-camera-permission,
@@ -56,9 +81,62 @@ textarea {
 #html5-qrcode-button-camera-stop,
 #html5-qrcode-button-file-selection {
   min-height: 40px;
-  border-radius: 8px;
-  background: #ea580c;
+  border-radius: 0;
+  background: #ff3d00;
   padding: 8px 12px;
-  color: white;
+  color: #0a0a0a;
   font-weight: 700;
+}
+
+@layer base {
+  ::selection {
+    background: #ff3d00;
+    color: #0a0a0a;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@layer components {
+  .page-title {
+    font-size: clamp(2.75rem, 7vw, 6.25rem);
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.375rem, 2.4vw, 2rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  .label-text {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .field {
+    min-height: 3rem;
+    border: 1px solid #262626;
+    border-radius: 0;
+    background: #1a1a1a;
+    color: #fafafa;
+    outline: none;
+    transition: border-color 150ms cubic-bezier(0.25, 0, 0, 1);
+  }
+
+  .field::placeholder {
+    color: #737373;
+  }
+
+  .field:focus {
+    border-color: #ff3d00;
+  }
 }

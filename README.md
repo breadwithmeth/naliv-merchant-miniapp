@@ -1,6 +1,6 @@
-# Naliv Merchant
+# Рабочее место комплектовщика
 
-React + Vite frontend for the merchant order processing panel.
+React + Vite frontend for order picking and processing.
 
 ## Scripts
 
@@ -14,3 +14,14 @@ The app uses `https://njt25.naliv.kz` as `BASE_URL`.
 
 Authentication is handled by manually entering a Bearer token. The token is
 stored in `localStorage` under `auth_token` and attached to API requests.
+
+## Telegram Mini App
+
+The app loads Telegram's official `telegram-web-app.js` script and initializes
+the Mini App runtime on startup:
+
+- calls `ready()` and `expand()`
+- syncs Telegram viewport and safe-area values into CSS variables
+- sets Telegram header, background, and bottom bar colors to the app background
+- uses Telegram's header BackButton for internal route navigation
+- triggers light haptic feedback on app buttons when available

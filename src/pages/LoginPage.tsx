@@ -30,15 +30,15 @@ export function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8">
+    <main className="telegram-safe-shell flex min-h-screen items-center justify-center bg-transparent px-4 py-8">
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-lg border border-line bg-white p-6 shadow-soft"
+        className="w-full max-w-md rounded-none border border-line bg-card p-6 shadow-none"
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+        <div className="flex h-12 w-12 items-center justify-center rounded-none bg-accent/10 text-accent">
           <KeyRound className="h-6 w-6" />
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-ink">Вход в панель магазина</h1>
+        <h1 className="mt-5 page-title text-ink">Рабочее место комплектовщика</h1>
         <p className="mt-2 text-sm leading-6 text-muted">
           Введите Bearer token. Запрос авторизации не выполняется.
         </p>
@@ -54,11 +54,11 @@ export function LoginPage() {
             setToken(event.target.value);
             setError(null);
           }}
-          className="mt-2 w-full rounded-lg border border-line px-3 py-3 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+          className="field mt-2 w-full px-3 py-3 text-sm"
           placeholder="Вставьте токен"
           autoComplete="off"
         />
-        {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="mt-2 text-sm text-accent">{error}</p> : null}
 
         <Button type="submit" className="mt-6 w-full" icon={<LogIn className="h-4 w-4" />}>
           Войти

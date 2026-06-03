@@ -9,9 +9,9 @@ const icons: Record<ToastType, typeof CheckCircle2> = {
 };
 
 const tones: Record<ToastType, string> = {
-  success: 'border-emerald-100 text-emerald-700',
-  error: 'border-red-100 text-red-700',
-  info: 'border-sky-100 text-sky-700',
+  success: 'border-foreground text-foreground',
+  error: 'border-accent text-accent',
+  info: 'border-line text-muted',
 };
 
 export function ToastViewport() {
@@ -25,20 +25,20 @@ export function ToastViewport() {
           <div
             key={toast.id}
             className={clsx(
-              'rounded-lg border bg-white p-4 shadow-soft',
+              'rounded-none border bg-card p-4 shadow-none',
               tones[toast.type],
             )}
           >
             <div className="flex gap-3">
               <Icon className="mt-0.5 h-5 w-5 shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-ink">{toast.title}</p>
+                <p className="text-sm font-bold uppercase text-ink">{toast.title}</p>
                 {toast.message ? (
                   <p className="mt-1 text-sm text-muted">{toast.message}</p>
                 ) : null}
               </div>
               <button
-                className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                className="rounded-none p-1 text-muted hover:bg-mutedSurface hover:text-foreground"
                 type="button"
                 aria-label="Закрыть"
                 onClick={() => dismissToast(toast.id)}

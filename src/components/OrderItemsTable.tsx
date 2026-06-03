@@ -21,13 +21,13 @@ export function OrderItemsTable({
   onEdit: (item: OrderItem) => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-white">
+    <div className="overflow-hidden rounded-none border border-line bg-card">
       <div className="border-b border-line px-4 py-3">
-        <h2 className="text-base font-semibold text-ink">Товары</h2>
+        <h2 className="section-title text-ink">Товары</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-line text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-muted">
+          <thead className="bg-mutedSurface text-left label-text text-muted">
             <tr>
               <th className="px-4 py-3">Товар</th>
               <th className="px-4 py-3">Штрихкоды</th>
@@ -46,7 +46,7 @@ export function OrderItemsTable({
                 <tr key={String(relationId)} className="align-top">
                   <td className="min-w-72 px-4 py-3">
                     <div className="flex gap-3">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-none bg-mutedSurface">
                         {image ? (
                           <img
                             src={image}
@@ -70,7 +70,7 @@ export function OrderItemsTable({
                             {item.options.map((option) => (
                               <span
                                 key={`${option.option_id}-${option.name}`}
-                                className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600"
+                                className="rounded-none bg-mutedSurface px-2 py-1 text-xs text-muted"
                               >
                                 {safeText(option.option_name || option.name)}
                               </span>

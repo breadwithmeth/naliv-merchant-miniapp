@@ -45,7 +45,7 @@ export function BarcodeScannerDialog({
   return (
     <Dialog open={open} title="Сканер штрихкода" onClose={onClose}>
       <div className="space-y-3">
-        <div id={readerId} className="overflow-hidden rounded-lg border border-line" />
+        <div id={readerId} className="overflow-hidden rounded-none border border-line" />
         <p className="text-sm text-muted">
           Наведите камеру на штрихкод товара. После распознавания откроется изменение
           количества.

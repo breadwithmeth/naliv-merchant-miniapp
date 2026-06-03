@@ -49,7 +49,7 @@ export function CourierReportsPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Отчет по курьерам</h1>
+          <h1 className="page-title text-ink">Отчет по курьерам</h1>
           <p className="mt-1 text-sm text-muted">
             Период, суммы доставки, заказы и разрез по типам оплаты.
           </p>
@@ -63,7 +63,7 @@ export function CourierReportsPage() {
         </Button>
       </div>
 
-      <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
+      <section className="rounded-none border border-line bg-card p-4 shadow-none">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
           <div className="flex gap-2">
             <Button variant="secondary" onClick={() => applyPreset('today')}>
@@ -108,13 +108,13 @@ export function CourierReportsPage() {
           </section>
 
           {grouped.length ? (
-            <section className="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+            <section className="overflow-hidden rounded-none border border-line bg-card shadow-none">
               <div className="border-b border-line px-4 py-3">
-                <h2 className="text-base font-semibold text-ink">Группировка по курьерам</h2>
+                <h2 className="section-title text-ink">Группировка по курьерам</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-line text-sm">
-                  <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-muted">
+                  <thead className="bg-mutedSurface text-left label-text text-muted">
                     <tr>
                       <th className="px-4 py-3">Курьер</th>
                       <th className="px-4 py-3">Заказы</th>
@@ -139,7 +139,7 @@ export function CourierReportsPage() {
                             {courier.paymentTypes.map((type) => (
                               <span
                                 key={`${courier.courierId}-${type.name}`}
-                                className="rounded-lg bg-slate-100 px-2 py-1 text-xs text-slate-700"
+                                className="rounded-none bg-mutedSurface px-2 py-1 text-xs text-foreground"
                               >
                                 {safeText(type.name)}: {toNumber(type.orders)} /{' '}
                                 <MoneyValue
@@ -189,7 +189,7 @@ function DateField({
         type="date"
         value={formatDateInput(value)}
         onChange={(event) => onChange(new Date(`${event.target.value}T12:00:00`))}
-        className="mt-2 block min-h-10 rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        className="field mt-2 block min-h-10 px-3 py-2 text-sm"
       />
     </label>
   );
@@ -197,9 +197,9 @@ function DateField({
 
 function SummaryTile({ label, value }: { label: string; value: number | JSX.Element }) {
   return (
-    <div className="rounded-lg border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-bold text-ink">{value}</p>
+    <div className="rounded-none border border-line bg-card p-4 shadow-none">
+      <p className="label-text text-muted">{label}</p>
+      <p className="mt-2 page-title text-ink">{value}</p>
     </div>
   );
 }

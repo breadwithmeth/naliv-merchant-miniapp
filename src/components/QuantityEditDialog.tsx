@@ -71,9 +71,9 @@ export function QuantityEditDialog({
           step="0.01"
           value={amount}
           onChange={(event) => setAmount(Number(event.target.value))}
-          className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+          className="field w-full px-3 py-2 text-sm"
         />
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-accent">{error}</p> : null}
       </div>
     </Dialog>
   );

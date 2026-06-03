@@ -39,7 +39,7 @@ export function CancelOrderDialog({
         id="cancel-reason"
         value={status}
         onChange={(event) => setStatus(Number(event.target.value))}
-        className="mt-2 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+        className="field mt-2 w-full px-3 py-2 text-sm"
       >
         {CANCEL_REASONS.map((reason) => (
           <option key={reason.status} value={reason.status}>

@@ -12,9 +12,9 @@ export function ErrorState({
 }) {
   return (
     <div className="flex min-h-56 items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-lg border border-red-100 bg-white p-6 text-center shadow-soft">
-        <AlertTriangle className="mx-auto h-10 w-10 text-red-500" />
-        <h2 className="mt-3 text-lg font-semibold text-ink">{title}</h2>
+      <div className="w-full max-w-md rounded-none border border-accent bg-card p-6 text-center shadow-none">
+        <AlertTriangle className="mx-auto h-10 w-10 text-accent" />
+        <h2 className="section-title mt-3 text-ink">{title}</h2>
         {message ? <p className="mt-2 text-sm text-muted">{message}</p> : null}
         {onRetry ? (
           <Button className="mt-4" onClick={onRetry}>

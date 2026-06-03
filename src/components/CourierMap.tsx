@@ -52,7 +52,7 @@ export function CourierMap({ points }: { points: MapPoint[] }) {
   );
 
   return (
-    <div className="h-[420px] overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+    <div className="h-[420px] overflow-hidden rounded-none border border-line bg-card shadow-none">
       <MapContainer
         center={center as [number, number]}
         zoom={points.length ? 13 : 11}

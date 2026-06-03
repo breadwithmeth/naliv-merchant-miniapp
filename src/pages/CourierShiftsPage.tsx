@@ -31,7 +31,7 @@ export function CourierShiftsPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Смены курьеров</h1>
+          <h1 className="page-title text-ink">Смены курьеров</h1>
           <p className="mt-1 text-sm text-muted">
             Список смен по всем курьерам или по конкретному ID.
           </p>
@@ -47,14 +47,14 @@ export function CourierShiftsPage() {
 
       <form
         onSubmit={submit}
-        className="flex flex-col gap-2 rounded-lg border border-line bg-white p-4 shadow-sm sm:flex-row sm:items-end"
+        className="flex flex-col gap-2 rounded-none border border-line bg-card p-4 shadow-none sm:flex-row sm:items-end"
       >
         <label className="block flex-1 text-sm font-semibold text-ink">
           ID курьера
           <input
             value={inputCourierId}
             onChange={(event) => setInputCourierId(event.target.value)}
-            className="mt-2 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+            className="field mt-2 w-full px-3 py-2 text-sm"
             placeholder="Оставьте пустым для всех"
           />
         </label>
@@ -79,10 +79,10 @@ export function CourierShiftsPage() {
       ) : null}
 
       {shiftsQuery.data?.length ? (
-        <section className="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+        <section className="overflow-hidden rounded-none border border-line bg-card shadow-none">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-line text-sm">
-              <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-muted">
+              <thead className="bg-mutedSurface text-left label-text text-muted">
                 <tr>
                   <th className="px-4 py-3">Курьер</th>
                   <th className="px-4 py-3">Начало</th>

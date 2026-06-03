@@ -8,15 +8,24 @@ import { CourierShiftsPage } from './pages/CourierShiftsPage';
 import { LoginPage } from './pages/LoginPage';
 import { OrderDetailPage } from './pages/OrderDetailPage';
 import { OrdersPage } from './pages/OrdersPage';
+import { useTelegramBackButton, useTelegramMiniApp } from './telegram/hooks';
 
 function ProtectedRoute() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return isAuthenticated ? <Layout /> : <Navigate to="/login" replace />;
 }
 
+function TelegramBackButtonBridge() {
+  useTelegramBackButton();
+  return null;
+}
+
 export function App() {
+  useTelegramMiniApp();
+
   return (
     <BrowserRouter>
+      <TelegramBackButtonBridge />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>

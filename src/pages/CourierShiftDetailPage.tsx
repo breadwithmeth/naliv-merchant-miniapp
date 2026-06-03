@@ -55,7 +55,7 @@ export function CourierShiftDetailPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">
+          <h1 className="page-title text-ink">
             Смена #{String(shift.shift_id ?? shift.id ?? shiftId)}
           </h1>
           <p className="mt-1 text-sm text-muted">
@@ -81,8 +81,8 @@ export function CourierShiftDetailPage() {
         />
       </section>
 
-      <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
-        <h2 className="text-base font-semibold text-ink">Типы оплаты</h2>
+      <section className="rounded-none border border-line bg-card p-4 shadow-none">
+        <h2 className="section-title text-ink">Типы оплаты</h2>
         {paymentTypes.length ? (
           <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
             {paymentTypes.map((type) => (
@@ -94,14 +94,14 @@ export function CourierShiftDetailPage() {
         )}
       </section>
 
-      <section className="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+      <section className="overflow-hidden rounded-none border border-line bg-card shadow-none">
         <div className="border-b border-line px-4 py-3">
-          <h2 className="text-base font-semibold text-ink">Заказы смены</h2>
+          <h2 className="section-title text-ink">Заказы смены</h2>
         </div>
         {orders.length ? (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-line text-sm">
-              <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-muted">
+              <thead className="bg-mutedSurface text-left label-text text-muted">
                 <tr>
                   <th className="px-4 py-3">ID</th>
                   <th className="px-4 py-3">Статус</th>
@@ -128,16 +128,16 @@ export function CourierShiftDetailPage() {
 
 function Metric({ label, value }: { label: string; value: JSX.Element | number }) {
   return (
-    <div className="rounded-lg border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
-      <p className="mt-2 text-lg font-bold text-ink">{value}</p>
+    <div className="rounded-none border border-line bg-card p-4 shadow-none">
+      <p className="label-text text-muted">{label}</p>
+      <p className="mt-2 text-3xl font-black leading-none text-ink">{value}</p>
     </div>
   );
 }
 
 function PaymentTypeBlock({ type }: { type: PaymentTypeSummary }) {
   return (
-    <div className="rounded-lg bg-slate-50 px-3 py-2 text-sm">
+    <div className="rounded-none bg-mutedSurface px-3 py-2 text-sm">
       <p className="font-semibold text-ink">{safeText(type.name)}</p>
       <div className="mt-2 space-y-1 text-muted">
         <p>Заказы: {toNumber(type.orders)}</p>
@@ -157,7 +157,7 @@ function OrderRow({ order }: { order: CourierReportOrder }) {
   const canceled = [5, 50, 51, 52, 53, 54].includes(status);
 
   return (
-    <tr className={canceled ? 'bg-red-50/60 align-top' : 'align-top'}>
+    <tr className={canceled ? 'bg-accent/10 align-top' : 'align-top'}>
       <td className="px-4 py-3 font-semibold text-ink">#{safeText(order.order_id, '-')}</td>
       <td className="px-4 py-3">
         <StatusBadge status={status} label={order.current_status?.status_name} />

@@ -87,7 +87,7 @@ export function CourierLocationsPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">
+          <h1 className="page-title text-ink">
             {orderId ? `Локации по заказу #${orderId}` : 'Локации курьеров'}
           </h1>
           <p className="mt-1 text-sm text-muted">
@@ -131,11 +131,11 @@ export function CourierLocationsPage() {
       {points.length ? (
         <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
           <CourierMap points={points} />
-          <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
-            <h2 className="text-base font-semibold text-ink">Список точек</h2>
+          <section className="rounded-none border border-line bg-card p-4 shadow-none">
+            <h2 className="section-title text-ink">Список точек</h2>
             <div className="mt-3 space-y-2">
               {points.map((point) => (
-                <div key={point.id} className="rounded-lg bg-slate-50 px-3 py-2 text-sm">
+                <div key={point.id} className="rounded-none bg-mutedSurface px-3 py-2 text-sm">
                   <p className="font-semibold text-ink">{point.label}</p>
                   {point.subtitle ? (
                     <p className="mt-1 text-muted">{point.subtitle}</p>

@@ -34,7 +34,7 @@ export function ConfirmDialog({
         </>
       }
     >
-      <p className="text-sm leading-6 text-slate-700">{message}</p>
+      <p className="text-sm leading-6 text-foreground">{message}</p>
     </Dialog>
   );
 }

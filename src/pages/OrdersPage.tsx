@@ -34,7 +34,7 @@ export function OrdersPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Заказы</h1>
+          <h1 className="page-title text-ink">Заказы</h1>
           <p className="mt-1 text-sm text-muted">
             Автообновление каждые 30 секунд. Показываются актуальные заказы магазина.
           </p>
@@ -79,7 +79,7 @@ export function OrdersPage() {
       ) : null}
 
       {pagination ? (
-        <div className="flex items-center justify-between rounded-lg border border-line bg-white px-4 py-3 text-sm">
+        <div className="flex items-center justify-between rounded-none border border-line bg-card px-4 py-3 text-sm">
           <span className="text-muted">
             Страница {pagination.page ?? page}
             {pagination.totalPages ? ` из ${pagination.totalPages}` : ''}

@@ -240,7 +240,7 @@ export function OrderDetailPage() {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold text-ink">
+            <h1 className="page-title text-ink">
               Заказ #{toInt(order.order_id)}
             </h1>
             <StatusBadge status={status} label={order.current_status?.status_name} />
@@ -276,7 +276,7 @@ export function OrderDetailPage() {
       </div>
 
       {processingBlocked ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="rounded-none border border-accent bg-accent/10 px-4 py-3 text-sm text-accent">
           Заказ недоступен для обработки из-за текущего платежного или ошибочного
           статуса.
         </div>
@@ -326,8 +326,8 @@ export function OrderDetailPage() {
             },
           ]}
         />
-        <div className="rounded-lg border border-line bg-white p-4 shadow-sm">
-          <h2 className="text-base font-semibold text-ink">Финансовая сводка</h2>
+        <div className="rounded-none border border-line bg-card p-4 shadow-none">
+          <h2 className="section-title text-ink">Финансовая сводка</h2>
           <dl className="mt-3 space-y-2 text-sm">
             <MoneyRow label="Товары" value={costSummary?.items_total ?? order.cost} />
             <MoneyRow label="Доставка" value={costSummary?.delivery_price ?? order.delivery_price} />
@@ -345,9 +345,9 @@ export function OrderDetailPage() {
       </section>
 
       {order.delivery_address?.details?.comment || order.extra ? (
-        <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
-          <h2 className="text-base font-semibold text-ink">Комментарии</h2>
-          <div className="mt-3 space-y-2 text-sm text-slate-700">
+        <section className="rounded-none border border-line bg-card p-4 shadow-none">
+          <h2 className="section-title text-ink">Комментарии</h2>
+          <div className="mt-3 space-y-2 text-sm text-foreground">
             {order.extra ? <p>К заказу: {order.extra}</p> : null}
             {order.delivery_address?.details?.comment ? (
               <p>К адресу: {order.delivery_address.details.comment}</p>
@@ -356,10 +356,10 @@ export function OrderDetailPage() {
         </section>
       ) : null}
 
-      <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
+      <section className="rounded-none border border-line bg-card p-4 shadow-none">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-base font-semibold text-ink">Поиск по штрихкоду</h2>
+            <h2 className="section-title text-ink">Поиск по штрихкоду</h2>
             <p className="mt-1 text-sm text-muted">
               Поддерживается CSV-строка штрихкодов и точное совпадение названия товара.
             </p>
@@ -374,7 +374,7 @@ export function OrderDetailPage() {
                   setManualBarcode('');
                 }
               }}
-              className="min-h-10 rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+              className="field min-h-10 px-3 py-2 text-sm"
               placeholder="Введите штрихкод"
             />
             <Button
@@ -399,13 +399,13 @@ export function OrderDetailPage() {
 
       <OrderItemsTable items={items} canEdit={canEditAmount} onEdit={openQuantityEditor} />
 
-      <section className="rounded-lg border border-line bg-white p-4 shadow-sm">
-        <h2 className="text-base font-semibold text-ink">История статусов</h2>
+      <section className="rounded-none border border-line bg-card p-4 shadow-none">
+        <h2 className="section-title text-ink">История статусов</h2>
         <div className="mt-4 space-y-3">
           {(order.status_history ?? []).map((entry, index) => (
             <div
               key={`${entry.status_id ?? entry.status}-${entry.timestamp}-${index}`}
-              className="flex flex-col gap-1 rounded-lg bg-slate-50 px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-1 rounded-none bg-mutedSurface px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
             >
               <StatusBadge status={toInt(entry.status, -1)} label={entry.status_name} />
               <span className="text-sm text-muted">
@@ -463,16 +463,16 @@ type InfoRow = {
 
 function InfoPanel({ title, rows }: { title: string; rows: InfoRow[] }) {
   return (
-    <div className="rounded-lg border border-line bg-white p-4 shadow-sm">
-      <h2 className="text-base font-semibold text-ink">{title}</h2>
+    <div className="rounded-none border border-line bg-card p-4 shadow-none">
+      <h2 className="section-title text-ink">{title}</h2>
       <div className="mt-3 space-y-3">
         {rows.map((row) => {
           const Icon = row.icon;
           return (
             <div key={row.label} className="flex gap-3 text-sm">
-              <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+              <Icon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+                <p className="label-text text-muted">
                   {row.label}
                 </p>
                 <p className="mt-0.5 break-words text-ink">{row.value}</p>

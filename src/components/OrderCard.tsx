@@ -17,31 +17,33 @@ export function OrderCard({
     <button
       type="button"
       onClick={onOpen}
-      className="w-full rounded-lg border border-line bg-white p-4 text-left shadow-sm transition hover:border-brand-200 hover:shadow-soft focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+      className="w-full rounded-none border border-line bg-card p-4 text-left shadow-none transition duration-150 ease-out hover:border-accent hover:bg-mutedSurface focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-lg font-bold text-ink">Заказ #{toInt(order.order_id)}</h2>
+            <h2 className="text-2xl font-black leading-none text-ink">
+              Заказ #{toInt(order.order_id)}
+            </h2>
             <StatusBadge status={status} label={order.current_status?.status_name} />
           </div>
-          <div className="mt-3 grid gap-2 text-sm text-slate-600 md:grid-cols-2">
+          <div className="mt-3 grid gap-2 text-sm text-muted md:grid-cols-2">
             <span className="flex min-w-0 items-center gap-2">
-              <User className="h-4 w-4 shrink-0 text-slate-400" />
+              <User className="h-4 w-4 shrink-0 text-muted" />
               <span className="truncate">{safeText(order.user?.name)}</span>
             </span>
             <span className="flex min-w-0 items-center gap-2">
-              <CalendarClock className="h-4 w-4 shrink-0 text-slate-400" />
+              <CalendarClock className="h-4 w-4 shrink-0 text-muted" />
               <span>{formatDateTime(order.delivery_date)}</span>
             </span>
             <span className="flex min-w-0 items-center gap-2 md:col-span-2">
-              <MapPin className="h-4 w-4 shrink-0 text-slate-400" />
+              <MapPin className="h-4 w-4 shrink-0 text-muted" />
               <span className="truncate">{buildAddressText(order.delivery_address)}</span>
             </span>
           </div>
         </div>
         <div className="shrink-0 text-left sm:text-right">
-          <p className="text-lg font-bold text-ink">{formatMoney(total)}</p>
+          <p className="text-2xl font-black leading-none text-ink">{formatMoney(total)}</p>
           <p className="mt-1 flex items-center gap-2 text-sm text-muted sm:justify-end">
             <CreditCard className="h-4 w-4" />
             {safeText(order.payment_type?.name, 'Оплата не указана')}
@@ -50,7 +52,7 @@ export function OrderCard({
       </div>
 
       {order.extra ? (
-        <div className="mt-3 flex gap-2 rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-700">
+        <div className="mt-3 flex gap-2 rounded-none bg-accent/10 px-3 py-2 text-sm text-accent">
           <MessageSquare className="mt-0.5 h-4 w-4 shrink-0" />
           <span className="line-clamp-2">{order.extra}</span>
         </div>
