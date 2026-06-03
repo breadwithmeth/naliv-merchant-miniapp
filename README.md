@@ -20,7 +20,8 @@ stored in `localStorage` under `auth_token` and attached to API requests.
 The app loads Telegram's official `telegram-web-app.js` script and initializes
 the Mini App runtime on startup:
 
-- calls `ready()` and `expand()`
+- calls `ready()`, `expand()`, and requests fullscreen mode with
+  `requestFullscreen()` when the Telegram client supports it
 - syncs Telegram viewport and safe-area values into CSS variables
 - sets Telegram header, background, and bottom bar colors to the app background
 - uses Telegram's header BackButton for internal route navigation

@@ -13,11 +13,21 @@ type TelegramBackButton = {
   offClick: (callback: () => void) => TelegramBackButton;
 };
 
+type TelegramEventName =
+  | 'viewportChanged'
+  | 'safeAreaChanged'
+  | 'contentSafeAreaChanged'
+  | 'fullscreenChanged'
+  | 'fullscreenFailed';
+
+type TelegramEventCallback = (eventData?: unknown) => void;
+
 export type TelegramWebApp = {
   initData?: string;
   version?: string;
   platform?: string;
   colorScheme?: 'light' | 'dark';
+  isFullscreen?: boolean;
   viewportHeight?: number;
   viewportStableHeight?: number;
   safeAreaInset?: TelegramInset;
@@ -25,12 +35,15 @@ export type TelegramWebApp = {
   BackButton?: TelegramBackButton;
   ready: () => void;
   expand: () => void;
+  requestFullscreen?: () => void;
+  exitFullscreen?: () => void;
+  isVersionAtLeast?: (version: string) => boolean;
   setHeaderColor?: (color: string) => void;
   setBackgroundColor?: (color: string) => void;
   setBottomBarColor?: (color: string) => void;
   disableVerticalSwipes?: () => void;
-  onEvent?: (event: string, callback: () => void) => void;
-  offEvent?: (event: string, callback: () => void) => void;
+  onEvent?: (event: TelegramEventName, callback: TelegramEventCallback) => void;
+  offEvent?: (event: TelegramEventName, callback: TelegramEventCallback) => void;
   HapticFeedback?: {
     impactOccurred?: (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => void;
   };
@@ -76,6 +89,29 @@ function syncViewportVariables(webApp: TelegramWebApp) {
   setCssPixels('--app-content-safe-right', contentSafe.right);
 }
 
+function syncTelegramFullscreenState(webApp: TelegramWebApp) {
+  document.documentElement.classList.toggle(
+    'telegram-fullscreen',
+    Boolean(webApp.isFullscreen),
+  );
+}
+
+function syncTelegramLayout(webApp: TelegramWebApp) {
+  syncViewportVariables(webApp);
+  syncTelegramFullscreenState(webApp);
+}
+
+function requestTelegramFullscreen(webApp: TelegramWebApp) {
+  if (!webApp.requestFullscreen || webApp.isFullscreen) return;
+  if (webApp.isVersionAtLeast?.('8.0') === false) return;
+
+  try {
+    webApp.requestFullscreen();
+  } catch {
+    syncTelegramFullscreenState(webApp);
+  }
+}
+
 export function initializeTelegramMiniApp() {
   const webApp = getTelegramWebApp();
   if (!webApp) return undefined;
@@ -85,19 +121,28 @@ export function initializeTelegramMiniApp() {
   webApp.setBackgroundColor?.(TELEGRAM_BACKGROUND);
   webApp.setBottomBarColor?.(TELEGRAM_BACKGROUND);
   webApp.disableVerticalSwipes?.();
-  webApp.expand();
-  webApp.ready();
-  syncViewportVariables(webApp);
 
-  const sync = () => syncViewportVariables(webApp);
+  const sync = () => syncTelegramLayout(webApp);
+  const handleFullscreenChanged = () => syncTelegramLayout(webApp);
+  const handleFullscreenFailed = () => syncTelegramFullscreenState(webApp);
+
   webApp.onEvent?.('viewportChanged', sync);
   webApp.onEvent?.('safeAreaChanged', sync);
   webApp.onEvent?.('contentSafeAreaChanged', sync);
+  webApp.onEvent?.('fullscreenChanged', handleFullscreenChanged);
+  webApp.onEvent?.('fullscreenFailed', handleFullscreenFailed);
+
+  webApp.expand();
+  webApp.ready();
+  syncTelegramLayout(webApp);
+  requestTelegramFullscreen(webApp);
 
   return () => {
     webApp.offEvent?.('viewportChanged', sync);
     webApp.offEvent?.('safeAreaChanged', sync);
     webApp.offEvent?.('contentSafeAreaChanged', sync);
+    webApp.offEvent?.('fullscreenChanged', handleFullscreenChanged);
+    webApp.offEvent?.('fullscreenFailed', handleFullscreenFailed);
   };
 }
 

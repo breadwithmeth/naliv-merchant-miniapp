@@ -11,6 +11,36 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --app-viewport-height: 100vh;
+  --app-viewport-stable-height: 100vh;
+  --app-safe-top: 0px;
+  --app-safe-bottom: 0px;
+  --app-safe-left: 0px;
+  --app-safe-right: 0px;
+  --app-content-safe-top: 0px;
+  --app-content-safe-bottom: 0px;
+  --app-content-safe-left: 0px;
+  --app-content-safe-right: 0px;
+  --app-top-inset: max(
+    var(--app-content-safe-top),
+    var(--app-safe-top),
+    env(safe-area-inset-top, 0px)
+  );
+  --app-bottom-inset: max(
+    var(--app-content-safe-bottom),
+    var(--app-safe-bottom),
+    env(safe-area-inset-bottom, 0px)
+  );
+  --app-left-inset: max(
+    var(--app-content-safe-left),
+    var(--app-safe-left),
+    env(safe-area-inset-left, 0px)
+  );
+  --app-right-inset: max(
+    var(--app-content-safe-right),
+    var(--app-safe-right),
+    env(safe-area-inset-right, 0px)
+  );
 }
 
 html,
@@ -34,14 +64,18 @@ body {
 }
 
 .telegram-mini-app body,
-.telegram-mini-app #root {
+.telegram-mini-app #root,
+.telegram-fullscreen body,
+.telegram-fullscreen #root {
   min-height: var(--app-viewport-height, 100vh);
 }
 
 .telegram-safe-shell {
+  box-sizing: border-box;
   min-height: var(--app-viewport-height, 100vh);
-  padding-left: var(--app-content-safe-left, 0px);
-  padding-right: var(--app-content-safe-right, 0px);
+  padding-top: var(--app-top-inset);
+  padding-left: var(--app-left-inset);
+  padding-right: var(--app-right-inset);
 }
 
 button,

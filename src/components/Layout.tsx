@@ -116,12 +116,12 @@ export function Layout() {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-[calc(5.75rem+var(--app-content-safe-bottom,0px))] sm:px-6 md:px-12 md:py-8 lg:px-16 lg:pb-[calc(2rem+var(--app-content-safe-bottom,0px))]">
+        <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-[calc(5.75rem+var(--app-bottom-inset))] sm:px-6 md:px-12 md:py-8 lg:px-16 lg:pb-[calc(2rem+var(--app-bottom-inset))]">
           <Outlet />
         </main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-background/95 px-2 pb-[calc(0.5rem+var(--app-content-safe-bottom,0px))] pt-2 backdrop-blur lg:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-background/95 pb-[calc(0.5rem+var(--app-bottom-inset))] pl-[calc(0.5rem+var(--app-left-inset))] pr-[calc(0.5rem+var(--app-right-inset))] pt-2 backdrop-blur lg:hidden">
         <div className="grid grid-cols-4 gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
