@@ -1,5 +1,6 @@
 export const queryKeys = {
   orders: (page: number) => ['orders', page] as const,
+  orderCounters: () => ['orders', 'counters'] as const,
   order: (orderId: string | number) => ['order', String(orderId)] as const,
   courierLocations: (orderId?: string | number) =>
     ['courier-locations', orderId ? String(orderId) : 'all'] as const,

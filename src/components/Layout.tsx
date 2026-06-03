@@ -1,15 +1,11 @@
-import {
-  ClipboardList,
-  LogOut,
-  MapPin,
-  Menu,
-  Route,
-  Truck,
-  X,
-} from 'lucide-react';
+import { ClipboardList, LogOut, MapPin, Menu, Route, Truck, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { clsx } from 'clsx';
+import { useQuery } from '@tanstack/react-query';
+import { getOrders } from '../api/orders';
+import { countOrderGroups } from '../lib/orderFilters';
+import { queryKeys } from '../lib/query';
 import { useAuthStore } from '../store/auth';
 import { Button } from './Button';
 
@@ -24,6 +20,18 @@ export function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
+  const orderCountersQuery = useQuery({
+    queryKey: queryKeys.orderCounters(),
+    queryFn: () =>
+      getOrders({
+        page: 1,
+        limit: 50,
+        dateFrom: '2024-01-01',
+      }),
+    refetchInterval: 30_000,
+  });
+
+  const orderCounts = countOrderGroups(orderCountersQuery.data?.orders ?? []);
 
   const handleLogout = () => {
     logout();
@@ -72,10 +80,28 @@ export function Layout() {
                 }
               >
                 <Icon className="h-5 w-5" />
-                {item.label}
+                <span className="min-w-0 flex-1">{item.label}</span>
+                {item.to === '/' ? (
+                  <span className="ml-auto flex shrink-0 gap-1">
+                    <span className="border border-line px-1.5 py-0.5 text-[10px] text-muted">
+                      Н {orderCounts.new ?? 0}
+                    </span>
+                    <span className="border border-line px-1.5 py-0.5 text-[10px] text-muted">
+                      С {orderCounts.collecting ?? 0}
+                    </span>
+                  </span>
+                ) : null}
               </NavLink>
             );
           })}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex min-h-11 w-full items-center gap-3 rounded-none border-l-2 border-transparent px-3 py-2.5 text-left text-sm font-bold uppercase text-muted transition hover:border-accent hover:bg-mutedSurface hover:text-accent"
+          >
+            <LogOut className="h-5 w-5" />
+            Выйти
+          </button>
         </nav>
       </aside>
 
@@ -103,13 +129,6 @@ export function Layout() {
               <p className="text-sm font-semibold text-ink">Обработка и сборка заказов</p>
             </div>
           </div>
-          <Button
-            variant="secondary"
-            onClick={handleLogout}
-            icon={<LogOut className="h-4 w-4" />}
-          >
-            Выйти
-          </Button>
         </header>
 
         <main className="mx-auto w-full max-w-7xl px-6 py-8 pb-[calc(2rem+var(--app-content-safe-bottom,0px))] md:px-12 lg:px-16">
