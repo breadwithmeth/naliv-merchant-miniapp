@@ -38,6 +38,7 @@ import {
   toInt,
   toNumber,
 } from '../lib/format';
+import { getOrderServiceFee, getOrderTotalWithServiceFee } from '../lib/orderTotals';
 import { queryKeys } from '../lib/query';
 import { canCancelOrder, getNextAction, isPaymentBlockedStatus } from '../lib/statuses';
 import { useToastStore } from '../store/toasts';
@@ -234,6 +235,8 @@ export function OrderDetailPage() {
 
   const canCancel = canCancelOrder(status);
   const costSummary = order.cost_summary;
+  const serviceFee = getOrderServiceFee(order);
+  const totalWithServiceFee = getOrderTotalWithServiceFee(order);
 
   return (
     <div className="space-y-5">
@@ -333,18 +336,13 @@ export function OrderDetailPage() {
             <MoneyRow label="Доставка" value={costSummary?.delivery_price ?? order.delivery_price} />
             <MoneyRow
               label="Сервисный сбор"
-              value={
-                costSummary?.delivery_service_fee ??
-                costSummary?.service_fee ??
-                order.delivery_service_fee ??
-                order.service_fee
-              }
+              value={serviceFee}
             />
             <MoneyRow label="Бонусы" value={costSummary?.bonus_used ?? order.bonus} />
             <div className="border-t border-line pt-2">
               <MoneyRow
                 label="Итого"
-                value={costSummary?.total_sum ?? order.total_cost ?? order.total_sum}
+                value={totalWithServiceFee}
                 strong
               />
             </div>

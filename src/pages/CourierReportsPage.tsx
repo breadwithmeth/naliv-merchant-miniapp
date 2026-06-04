@@ -13,6 +13,11 @@ import {
   safeText,
   toNumber,
 } from '../lib/format';
+import {
+  getOrderServiceFee,
+  getOrderTotalWithServiceFee,
+  getPaymentTotalWithServiceFee,
+} from '../lib/orderTotals';
 import { queryKeys } from '../lib/query';
 import type { CourierReportData, PaymentTypeSummary } from '../types/api';
 
@@ -161,12 +166,7 @@ export function CourierReportsPage() {
                               >
                                 {safeText(type.name)}: {toNumber(type.orders)} /{' '}
                                 <MoneyValue
-                                  value={
-                                    type.totalOrderSum ??
-                                    type.total_order_sum ??
-                                    type.total_amount ??
-                                    type.amount
-                                  }
+                                  value={getPaymentTotalWithServiceFee(type)}
                                 />{' '}
                                 / сбор{' '}
                                 <MoneyValue
@@ -238,8 +238,8 @@ function groupByCourier(data?: CourierReportData): CourierBucket[] {
     const courierId = courier?.courier_id ?? courier?.id ?? -1;
     const key = String(courierId);
     const deliveryRevenue = toNumber(order.delivery_price);
-    const deliveryServiceFee = toNumber(order.delivery_service_fee ?? order.service_fee);
-    const totalOrderSum = toNumber(order.total_sum);
+    const deliveryServiceFee = toNumber(getOrderServiceFee(order));
+    const totalOrderSum = getOrderTotalWithServiceFee(order);
     const orderSumWithoutDelivery = Math.max(totalOrderSum - deliveryRevenue, 0);
     const paymentName = safeText(order.payment_type?.name, 'Не указан');
     const orderTime = readOrderTimestamp(order);

@@ -1,6 +1,7 @@
 import { CalendarClock, CreditCard, MapPin, MessageSquare, User } from 'lucide-react';
 import type { OrderSummary } from '../types/api';
 import { buildAddressText, formatDateTime, formatMoney, safeText, toInt } from '../lib/format';
+import { getOrderServiceFee, getOrderTotalWithServiceFee } from '../lib/orderTotals';
 import { StatusBadge } from './StatusBadge';
 
 export function OrderCard({
@@ -11,8 +12,8 @@ export function OrderCard({
   onOpen: () => void;
 }) {
   const status = order.current_status?.status ?? null;
-  const total = order.total_cost ?? order.total_sum ?? order.cost;
-  const serviceFee = order.delivery_service_fee ?? order.service_fee;
+  const total = getOrderTotalWithServiceFee(order);
+  const serviceFee = getOrderServiceFee(order);
   const hasServiceFee = serviceFee !== null && serviceFee !== undefined && serviceFee !== '';
 
   return (

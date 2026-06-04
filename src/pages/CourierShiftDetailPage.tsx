@@ -10,6 +10,10 @@ import { LoadingState } from '../components/LoadingState';
 import { MoneyValue } from '../components/MoneyValue';
 import { StatusBadge } from '../components/StatusBadge';
 import { buildAddressText, safeText, toInt, toNumber } from '../lib/format';
+import {
+  getOrderTotalWithServiceFee,
+  getPaymentTotalWithServiceFee,
+} from '../lib/orderTotals';
 import { queryKeys } from '../lib/query';
 import type { CourierReportOrder, PaymentTypeSummary } from '../types/api';
 
@@ -50,6 +54,9 @@ export function CourierShiftDetailPage() {
 
   const paymentTypes = shift.payment_types ?? [];
   const orders = shift.orders ?? [];
+  const shiftTotal = orders.length
+    ? orders.reduce((sum, order) => sum + getOrderTotalWithServiceFee(order), 0)
+    : toNumber(shift.totals?.total_amount ?? shift.total_amount);
 
   return (
     <div className="space-y-5">
@@ -77,7 +84,7 @@ export function CourierShiftDetailPage() {
         <Metric label="Заказы" value={toNumber(shift.totals?.orders_count ?? shift.orders_count)} />
         <Metric
           label="Сумма"
-          value={<MoneyValue value={shift.totals?.total_amount ?? shift.total_amount} />}
+          value={<MoneyValue value={shiftTotal} />}
         />
       </section>
 
@@ -144,7 +151,7 @@ function PaymentTypeBlock({ type }: { type: PaymentTypeSummary }) {
         <p>
           Сумма:{' '}
           <MoneyValue
-            value={type.total_amount ?? type.totalOrderSum ?? type.total_order_sum ?? type.amount}
+            value={getPaymentTotalWithServiceFee(type)}
           />
         </p>
       </div>
@@ -164,7 +171,7 @@ function OrderRow({ order }: { order: CourierReportOrder }) {
       </td>
       <td className="min-w-72 px-4 py-3">{buildAddressText(order.delivery_address)}</td>
       <td className="px-4 py-3">{safeText(order.payment_type?.name, 'Не указан')}</td>
-      <td className="px-4 py-3"><MoneyValue value={order.total_sum} /></td>
+      <td className="px-4 py-3"><MoneyValue value={getOrderTotalWithServiceFee(order)} /></td>
       <td className="px-4 py-3"><DateTimeValue value={order.order_created} /></td>
     </tr>
   );
