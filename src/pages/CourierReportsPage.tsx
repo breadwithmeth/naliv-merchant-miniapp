@@ -7,7 +7,12 @@ import { EmptyState } from '../components/EmptyState';
 import { ErrorState } from '../components/ErrorState';
 import { LoadingState } from '../components/LoadingState';
 import { MoneyValue } from '../components/MoneyValue';
-import { formatDateForApi, formatDateInput, safeText, toNumber } from '../lib/format';
+import {
+  formatDateForApi,
+  formatDateTimeInput,
+  safeText,
+  toNumber,
+} from '../lib/format';
 import { queryKeys } from '../lib/query';
 import type { CourierReportData, PaymentTypeSummary } from '../types/api';
 
@@ -15,7 +20,10 @@ type CourierBucket = {
   courierId: string;
   name: string;
   orders: number;
+  firstOrderAt: number | null;
+  lastOrderAt: number | null;
   deliveryRevenue: number;
+  deliveryServiceFee: number;
   totalOrderSum: number;
   orderSumWithoutDelivery: number;
   paymentTypes: PaymentTypeSummary[];
@@ -73,15 +81,15 @@ export function CourierReportsPage() {
               Вчера
             </Button>
           </div>
-          <DateField
+          <DateTimeField
             label="Начало"
             value={startDate}
-            onChange={(date) => setStartDate(startOfDay(date))}
+            onChange={setStartDate}
           />
-          <DateField
+          <DateTimeField
             label="Конец"
             value={endDate}
-            onChange={(date) => setEndDate(endOfDay(date))}
+            onChange={setEndDate}
           />
         </div>
       </section>
@@ -97,13 +105,17 @@ export function CourierReportsPage() {
 
       {!reportQuery.isLoading && !reportQuery.isError ? (
         <>
-          <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             <SummaryTile label="Доставлено" value={summary.totalDeliveredOrders} />
             <SummaryTile label="С курьером" value={summary.ordersWithCourier} />
             <SummaryTile label="Без курьера" value={summary.ordersWithoutCourier} />
             <SummaryTile
               label="Сумма доставки"
               value={<MoneyValue value={summary.totalDeliveryRevenue} />}
+            />
+            <SummaryTile
+              label="Сервисный сбор"
+              value={<MoneyValue value={summary.totalDeliveryServiceFee} />}
             />
           </section>
 
@@ -118,7 +130,9 @@ export function CourierReportsPage() {
                     <tr>
                       <th className="px-4 py-3">Курьер</th>
                       <th className="px-4 py-3">Заказы</th>
+                      <th className="px-4 py-3">Время</th>
                       <th className="px-4 py-3">Доставка</th>
+                      <th className="px-4 py-3">Сервисный сбор</th>
                       <th className="px-4 py-3">Сумма заказов</th>
                       <th className="px-4 py-3">Без доставки</th>
                       <th className="px-4 py-3">Типы оплаты</th>
@@ -129,7 +143,11 @@ export function CourierReportsPage() {
                       <tr key={courier.courierId} className="align-top">
                         <td className="px-4 py-3 font-semibold text-ink">{courier.name}</td>
                         <td className="px-4 py-3">{courier.orders}</td>
+                        <td className="px-4 py-3">{formatTimeRange(courier)}</td>
                         <td className="px-4 py-3"><MoneyValue value={courier.deliveryRevenue} /></td>
+                        <td className="px-4 py-3">
+                          <MoneyValue value={courier.deliveryServiceFee} />
+                        </td>
                         <td className="px-4 py-3"><MoneyValue value={courier.totalOrderSum} /></td>
                         <td className="px-4 py-3">
                           <MoneyValue value={courier.orderSumWithoutDelivery} />
@@ -148,6 +166,12 @@ export function CourierReportsPage() {
                                     type.total_order_sum ??
                                     type.total_amount ??
                                     type.amount
+                                  }
+                                />{' '}
+                                / сбор{' '}
+                                <MoneyValue
+                                  value={
+                                    type.deliveryServiceFee ?? type.delivery_service_fee
                                   }
                                 />
                               </span>
@@ -173,7 +197,7 @@ export function CourierReportsPage() {
   );
 }
 
-function DateField({
+function DateTimeField({
   label,
   value,
   onChange,
@@ -186,9 +210,10 @@ function DateField({
     <label className="block text-sm font-semibold text-ink">
       {label}
       <input
-        type="date"
-        value={formatDateInput(value)}
-        onChange={(event) => onChange(new Date(`${event.target.value}T12:00:00`))}
+        type="datetime-local"
+        step="60"
+        value={formatDateTimeInput(value)}
+        onChange={(event) => onChange(parseDateTimeInput(event.target.value, value))}
         className="field mt-2 block min-h-10 px-3 py-2 text-sm"
       />
     </label>
@@ -213,9 +238,11 @@ function groupByCourier(data?: CourierReportData): CourierBucket[] {
     const courierId = courier?.courier_id ?? courier?.id ?? -1;
     const key = String(courierId);
     const deliveryRevenue = toNumber(order.delivery_price);
+    const deliveryServiceFee = toNumber(order.delivery_service_fee ?? order.service_fee);
     const totalOrderSum = toNumber(order.total_sum);
     const orderSumWithoutDelivery = Math.max(totalOrderSum - deliveryRevenue, 0);
     const paymentName = safeText(order.payment_type?.name, 'Не указан');
+    const orderTime = readOrderTimestamp(order);
 
     const bucket =
       buckets.get(key) ??
@@ -223,7 +250,10 @@ function groupByCourier(data?: CourierReportData): CourierBucket[] {
         courierId: key,
         name: courier ? safeText(courier.name ?? courier.login, 'Курьер') : 'Без курьера',
         orders: 0,
+        firstOrderAt: null,
+        lastOrderAt: null,
         deliveryRevenue: 0,
+        deliveryServiceFee: 0,
         totalOrderSum: 0,
         orderSumWithoutDelivery: 0,
         paymentTypes: [],
@@ -231,7 +261,14 @@ function groupByCourier(data?: CourierReportData): CourierBucket[] {
       };
 
     bucket.orders += 1;
+    if (orderTime !== null) {
+      bucket.firstOrderAt =
+        bucket.firstOrderAt === null ? orderTime : Math.min(bucket.firstOrderAt, orderTime);
+      bucket.lastOrderAt =
+        bucket.lastOrderAt === null ? orderTime : Math.max(bucket.lastOrderAt, orderTime);
+    }
     bucket.deliveryRevenue += deliveryRevenue;
+    bucket.deliveryServiceFee += deliveryServiceFee;
     bucket.totalOrderSum += totalOrderSum;
     bucket.orderSumWithoutDelivery += orderSumWithoutDelivery;
 
@@ -245,6 +282,7 @@ function groupByCourier(data?: CourierReportData): CourierBucket[] {
 
     payment.orders = toNumber(payment.orders) + 1;
     payment.deliveryRevenue = toNumber(payment.deliveryRevenue) + deliveryRevenue;
+    payment.deliveryServiceFee = toNumber(payment.deliveryServiceFee) + deliveryServiceFee;
     payment.totalOrderSum = toNumber(payment.totalOrderSum) + totalOrderSum;
     payment.orderSumWithoutDelivery =
       toNumber(payment.orderSumWithoutDelivery) + orderSumWithoutDelivery;
@@ -273,7 +311,42 @@ function makeSummary(data: CourierReportData | undefined, grouped: CourierBucket
       summary?.total_delivery_revenue,
       grouped.reduce((sum, courier) => sum + courier.deliveryRevenue, 0),
     ),
+    totalDeliveryServiceFee: toNumber(
+      summary?.total_delivery_service_fee ?? summary?.total_service_fee,
+      grouped.reduce((sum, courier) => sum + courier.deliveryServiceFee, 0),
+    ),
   };
+}
+
+function parseDateTimeInput(value: string, fallback: Date) {
+  const parsed = value ? new Date(value) : null;
+  return parsed && !Number.isNaN(parsed.getTime()) ? parsed : fallback;
+}
+
+function readOrderTimestamp(order: {
+  order_created?: string | null;
+  created_at?: string | null;
+  log_timestamp?: string | null;
+  delivery_date?: string | null;
+}) {
+  const value =
+    order.order_created ?? order.created_at ?? order.log_timestamp ?? order.delivery_date;
+  if (!value) return null;
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.getTime();
+}
+
+function formatTimeRange(courier: Pick<CourierBucket, 'firstOrderAt' | 'lastOrderAt'>) {
+  if (courier.firstOrderAt === null || courier.lastOrderAt === null) return 'Не указано';
+
+  const formatTime = new Intl.DateTimeFormat('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format;
+  const first = formatTime(courier.firstOrderAt);
+  const last = formatTime(courier.lastOrderAt);
+  return first === last ? first : `${first}–${last}`;
 }
 
 function startOfDay(date: Date) {

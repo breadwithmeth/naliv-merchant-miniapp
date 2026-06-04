@@ -12,6 +12,8 @@ export function OrderCard({
 }) {
   const status = order.current_status?.status ?? null;
   const total = order.total_cost ?? order.total_sum ?? order.cost;
+  const serviceFee = order.delivery_service_fee ?? order.service_fee;
+  const hasServiceFee = serviceFee !== null && serviceFee !== undefined && serviceFee !== '';
 
   return (
     <button
@@ -44,6 +46,11 @@ export function OrderCard({
         </div>
         <div className="shrink-0 text-left sm:text-right">
           <p className="text-xl font-black leading-none text-ink">{formatMoney(total)}</p>
+          {hasServiceFee ? (
+            <p className="mt-1 text-xs font-semibold text-foreground">
+              Сбор: {formatMoney(serviceFee)}
+            </p>
+          ) : null}
           <p className="mt-1 flex items-center gap-1.5 text-xs text-muted sm:justify-end">
             <CreditCard className="h-3.5 w-3.5" />
             {safeText(order.payment_type?.name, 'Оплата не указана')}

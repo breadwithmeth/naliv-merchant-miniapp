@@ -192,6 +192,8 @@ export type CourierReportData = {
     orders_with_courier?: number | string | null;
     orders_without_courier?: number | string | null;
     total_delivery_revenue?: number | string | null;
+    total_delivery_service_fee?: number | string | null;
+    total_service_fee?: number | string | null;
     [key: string]: unknown;
   };
   orders?: CourierReportOrder[];
@@ -203,8 +205,12 @@ export type CourierReportOrder = {
   courier?: OrderCourier | null;
   delivery_price?: number | string | null;
   delivery_service_fee?: number | string | null;
+  service_fee?: number | string | null;
   total_sum?: number | string | null;
   order_created?: string | null;
+  created_at?: string | null;
+  delivery_date?: string | null;
+  log_timestamp?: string | null;
   delivery_address?: string | DeliveryAddress | null;
   payment_type?: PaymentType | null;
   current_status?: OrderStatus | null;

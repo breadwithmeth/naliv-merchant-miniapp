@@ -57,6 +57,11 @@ export function formatDateInput(date: Date) {
   return `${date.getFullYear()}-${two(date.getMonth() + 1)}-${two(date.getDate())}`;
 }
 
+export function formatDateTimeInput(date: Date) {
+  const two = (value: number) => String(value).padStart(2, '0');
+  return `${formatDateInput(date)}T${two(date.getHours())}:${two(date.getMinutes())}`;
+}
+
 export function buildAddressText(address?: DeliveryAddress | string | null) {
   if (!address) return 'Адрес не указан';
   if (typeof address === 'string') return address;

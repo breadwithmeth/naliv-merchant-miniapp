@@ -331,7 +331,15 @@ export function OrderDetailPage() {
           <dl className="mt-3 space-y-2 text-sm">
             <MoneyRow label="Товары" value={costSummary?.items_total ?? order.cost} />
             <MoneyRow label="Доставка" value={costSummary?.delivery_price ?? order.delivery_price} />
-            <MoneyRow label="Сервисный сбор" value={costSummary?.service_fee ?? order.service_fee} />
+            <MoneyRow
+              label="Сервисный сбор"
+              value={
+                costSummary?.delivery_service_fee ??
+                costSummary?.service_fee ??
+                order.delivery_service_fee ??
+                order.service_fee
+              }
+            />
             <MoneyRow label="Бонусы" value={costSummary?.bonus_used ?? order.bonus} />
             <div className="border-t border-line pt-2">
               <MoneyRow
