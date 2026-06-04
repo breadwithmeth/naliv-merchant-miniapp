@@ -36,7 +36,7 @@ export function formatDateTime(value: Nullable<string | Date>) {
   }).format(date);
 }
 
-export function formatDateForApi(date: Date) {
+export function formatDateTimeWithTimezoneForApi(date: Date) {
   const two = (value: number) => String(value).padStart(2, '0');
   const three = (value: number) => String(value).padStart(3, '0');
   const offset = -date.getTimezoneOffset();
@@ -50,6 +50,18 @@ export function formatDateForApi(date: Date) {
   )}:${two(date.getMinutes())}:${two(date.getSeconds())}.${three(
     date.getMilliseconds(),
   )}${sign}${hours}:${minutes}`;
+}
+
+export function formatDateForApi(date: Date) {
+  return formatDateTimeWithTimezoneForApi(date);
+}
+
+export function getClientTimeZone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch {
+    return 'UTC';
+  }
 }
 
 export function formatDateInput(date: Date) {

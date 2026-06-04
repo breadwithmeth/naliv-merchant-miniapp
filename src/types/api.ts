@@ -42,8 +42,8 @@ export type DeliveryAddress = {
 };
 
 export type PaymentType = {
-  payment_type_id?: number;
-  id?: number;
+  payment_type_id?: number | string;
+  id?: number | string;
   name?: string | null;
 };
 
@@ -191,9 +191,13 @@ export type CourierReportData = {
     total_delivered_orders?: number | string | null;
     orders_with_courier?: number | string | null;
     orders_without_courier?: number | string | null;
+    total_revenue?: number | string | null;
+    total_revenue_with_service_fee?: number | string | null;
+    total_orders_without_delivery_and_service_fee?: number | string | null;
     total_delivery_revenue?: number | string | null;
     total_delivery_service_fee?: number | string | null;
     total_service_fee?: number | string | null;
+    payment_methods?: PaymentTypeSummary[];
     [key: string]: unknown;
   };
   orders?: CourierReportOrder[];
@@ -204,9 +208,16 @@ export type CourierReportOrder = {
   order_id?: number | string | null;
   courier?: OrderCourier | null;
   delivery_price?: number | string | null;
+  deliveryServiceFee?: number | string | null;
   delivery_service_fee?: number | string | null;
+  serviceFee?: number | string | null;
   service_fee?: number | string | null;
+  totalSumWithServiceFee?: number | string | null;
+  total_sum_with_service_fee?: number | string | null;
+  totalSum?: number | string | null;
   total_sum?: number | string | null;
+  orderSumWithoutDeliveryAndServiceFee?: number | string | null;
+  order_sum_without_delivery_and_service_fee?: number | string | null;
   order_created?: string | null;
   created_at?: string | null;
   delivery_date?: string | null;
@@ -237,14 +248,23 @@ export type CourierShift = {
 };
 
 export type PaymentTypeSummary = {
+  payment_type_id?: number | string | null;
+  payment_type_name?: string | null;
   name?: string | null;
+  orders_count?: number | string | null;
   orders?: number | string | null;
   deliveryRevenue?: number | string | null;
   delivery_revenue?: number | string | null;
   deliveryServiceFee?: number | string | null;
   delivery_service_fee?: number | string | null;
+  serviceFee?: number | string | null;
+  service_fee?: number | string | null;
   totalOrderSum?: number | string | null;
   total_order_sum?: number | string | null;
+  totalSumWithServiceFee?: number | string | null;
+  total_sum_with_service_fee?: number | string | null;
+  orderSumWithoutDeliveryAndServiceFee?: number | string | null;
+  order_sum_without_delivery_and_service_fee?: number | string | null;
   orderSumWithoutDelivery?: number | string | null;
   order_sum_without_delivery?: number | string | null;
   total_amount?: number | string | null;

@@ -21,11 +21,13 @@ export async function getCourierLocations(orderId?: string | number) {
 export async function getCourierReports(params: {
   startDate: string;
   endDate: string;
+  timeZone?: string;
 }) {
   const searchParams = new URLSearchParams({
     start_date: params.startDate,
     end_date: params.endDate,
   });
+  if (params.timeZone) searchParams.set('timezone', params.timeZone);
 
   const payload = await request<ApiEnvelope<CourierReportData>>(
     `/api/businesses/reports/couriers?${searchParams.toString()}`,

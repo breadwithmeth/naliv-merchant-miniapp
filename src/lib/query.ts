@@ -4,8 +4,8 @@ export const queryKeys = {
   order: (orderId: string | number) => ['order', String(orderId)] as const,
   courierLocations: (orderId?: string | number) =>
     ['courier-locations', orderId ? String(orderId) : 'all'] as const,
-  courierReports: (start: string, end: string) =>
-    ['courier-reports', start, end] as const,
+  courierReports: (start: string, end: string, timeZone?: string) =>
+    ['courier-reports', start, end, timeZone ?? 'UTC'] as const,
   courierShifts: (courierId?: string | number) =>
     ['courier-shifts', courierId ? String(courierId) : 'all'] as const,
   courierShift: (shiftId: string | number, courierId: string | number) =>

@@ -114,6 +114,15 @@ export function Layout() {
               </p>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="inline-flex h-10 shrink-0 items-center gap-2 border border-line px-3 text-xs font-bold uppercase text-muted transition hover:border-accent hover:text-accent lg:hidden"
+            aria-label="Выйти из аккаунта"
+          >
+            <LogOut className="h-4 w-4" />
+            Выйти
+          </button>
         </header>
 
         <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-[calc(5.75rem+var(--app-bottom-inset))] sm:px-6 md:px-12 md:py-8 lg:px-16 lg:pb-[calc(2rem+var(--app-bottom-inset))]">
