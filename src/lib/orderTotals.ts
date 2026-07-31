@@ -65,25 +65,13 @@ export function getOrderServiceFee(order: OrderTotalLike) {
 }
 
 export function getOrderBaseTotal(order: OrderTotalLike) {
-  return order.costSummary?.totalSum ??
-    order.costSummary?.total_sum ??
-    order.cost_summary?.totalSum ??
-    order.cost_summary?.total_sum ??
-    order.totalCost ??
-    order.total_cost ??
-    order.totalSum ??
-    order.total_sum ??
-    order.cost;
+  return order.cost_summary?.total_sum ?? toNumber(order.cost)+toNumber(order.delivery_service_fee);
 }
 
 export function getOrderTotalWithServiceFee(order: OrderTotalLike) {
-  const explicitTotal =
-    order.totalSumWithServiceFee ?? order.total_sum_with_service_fee;
-  if (explicitTotal !== null && explicitTotal !== undefined) {
-    return toNumber(explicitTotal);
-  }
+  
 
-  return toNumber(getOrderBaseTotal(order)) + toNumber(getOrderServiceFee(order));
+  return toNumber(getOrderBaseTotal(order));
 }
 
 export function getOrderGoodsTotal(order: OrderTotalLike) {
