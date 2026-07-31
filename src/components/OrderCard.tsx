@@ -37,7 +37,7 @@ export function OrderCard({
             </span>
             <span className="flex min-w-0 items-center gap-2">
               <CalendarClock className="h-3.5 w-3.5 shrink-0 text-muted" />
-              <span>{formatDateTime(order.delivery_date)}</span>
+              <span>{formatDateTime(order.log_timestamp)}</span>
             </span>
             <span className="flex min-w-0 items-center gap-2 md:col-span-2">
               <MapPin className="h-3.5 w-3.5 shrink-0 text-muted" />
